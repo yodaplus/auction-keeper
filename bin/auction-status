@@ -30,13 +30,12 @@ from pymaker import Address, Wad
 
 parser = argparse.ArgumentParser(prog='auction-keeper')
 parser.add_argument("--rpc-host", type=str, default="localhost", help="JSON-RPC host (default: `localhost')")
-parser.add_argument("--rpc-port", type=int, default=8545, help="JSON-RPC port (default: `8545')")
 parser.add_argument("--rpc-timeout", type=int, default=10, help="JSON-RPC timeout (in seconds, default: 10)")
 parser.add_argument("--eth-from", type=str, help="Ethereum account from which to send transactions")
 parser.add_argument("--json-from", type=str, help="JSON file containing dss deployment addresses")
 arguments = parser.parse_args()
 
-w3 = Web3(Web3.HTTPProvider(endpoint_uri=f"http://{arguments.rpc_host}:{arguments.rpc_port}",
+w3 = Web3(Web3.HTTPProvider(endpoint_uri=arguments.rpc_host,
                             request_kwargs={"timeout": arguments.rpc_timeout}))
 w3.eth.defaultAccount = arguments.eth_from or w3.eth.accounts[0]
 our_address = Address(w3.eth.defaultAccount)

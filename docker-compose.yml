@@ -1,47 +1,67 @@
 version: "3.2"
+
+x-common-env: &common-env
+  RPC_HOST: https://rpc-apothem.xinfin.yodaplus.net
+  FROM_BLOCK: 32463078
+  PASS: ${PASS}
+
 services:
-  flipper_auction:
+  clip_kick:
     build: .
-    image: makerdao/auction-keeper
-    env_file:
-      - .env
-    volumes:
-      - $PWD/hush:/home/keeper/hush
-      - $PWD/model:/home/keeper/model
-    command: >
-      bash -c "./auction-keeper --rpc-host=$${RPC_HOST} --rpc-port=$${RPC_PORT} \
-      --eth-from=$${ETH_FROM} \
-      --eth-key='key_file=/home/keeper/hush/auction.json,pass_file=/home/keeper/hush/auction.pass' \
-      --flipper=$${FLIPPER_ADDRESS} \
-      --cat=$${CAT_ADDRESS} \
-      --model '/home/keeper/model/model.sh'"
+    environment:
+      <<: *common-env
+      FROM: ${FROM_CLIP_KICK}
+      KEY: ${KEY_CLIP_KICK}
+      ILK: XDC-A
+    command: ./scripts/start_clip_kick.sh
 
-  flopper_auction:
-    image: makerdao/auction-keeper
-    env_file:
-      - .env
-    volumes:
-      - $PWD/hush:/home/keeper/hush
-      - $PWD/model:/home/keeper/model
-    command: >
-      bash -c "./auction-keeper --rpc-host=$${RPC_HOST} --rpc-port=$${RPC_PORT} \
-      --eth-from=$${ETH_FROM} \
-      --eth-key='key_file=/home/keeper/hush/auction.json,pass_file=/home/keeper/hush/auction.pass' \
-      --flopper=$${FLOPPER_ADDRESS} \
-      --vow=$${VOW_ADDRESS} \
-      --model '/home/keeper/model/model.sh'"
+  flap_kick:
+    build: .
+    environment:
+      <<: *common-env
+      FROM: ${FROM_FLAP_KICK}
+      KEY: ${KEY_FLAP_KICK}
+    command: ./scripts/start_flap_kick.sh
 
-  flapper_auction:
-    image: makerdao/auction-keeper
-    env_file:
-      - .env
-    volumes:
-      - $PWD/hush:/home/keeper/hush
-      - $PWD/model:/home/keeper/model
-    command: >
-      bash -c "./auction-keeper --rpc-host=$${RPC_HOST} --rpc-port=$${RPC_PORT} \
-      --eth-from=$${ETH_FROM} \
-      --eth-key='key_file=/home/keeper/hush/auction.json,pass_file=/home/keeper/hush/auction.pass' \
-      --flapper=$${FLAPPER_ADDRESS} \
-      --vow=$${VOW_ADDRESS} \
-      --model '/home/keeper/model/model.sh'"
+  flop_kick:
+    build: .
+    environment:
+      <<: *common-env
+      FROM: ${FROM_FLOP_KICK}
+      KEY: ${KEY_FLOP_KICK}
+    command: ./scripts/start_flop_kick.sh
+
+  clip_bid:
+    build: .
+    environment:
+      <<: *common-env
+      FROM: ${FROM_CLIP_BID}
+      KEY: ${KEY_CLIP_BID}
+      ILK: XDC-A
+      MAX_AUCTIONS: 10
+      BID_CHECK_INTERVAL: 60
+      BID_DELAY: 10
+      RETURN_GEM_INTERVAL: 60
+      VAT_DAI_TARGET: 20
+    command: ./scripts/start_clip_bid.sh
+
+  flap_bid:
+    build: .
+    environment:
+      <<: *common-env
+      FROM: ${FROM_FLAP_BID}
+      KEY: ${KEY_FLAP_BID}
+      BID_CHECK_INTERVAL: 60
+      BID_DELAY: 10
+    command: ./scripts/start_flap_bid.sh
+
+  flop_bid:
+    build: .
+    environment:
+      <<: *common-env
+      FROM: ${FROM_FLOP_BID}
+      KEY: ${KEY_FLOP_BID}
+      BID_CHECK_INTERVAL: 60
+      BID_DELAY: 10
+      VAT_DAI_TARGET: 20
+    command: ./scripts/start_flop_bid.sh

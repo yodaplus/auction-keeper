@@ -27,6 +27,7 @@ from datetime import datetime
 from requests.exceptions import RequestException
 from typing import Optional
 from web3 import Web3
+from web3.middleware import geth_poa_middleware
 
 from pymaker import Address, get_pending_transactions, web3_via_http
 from pymaker.auctions import Clipper, Flapper, Flipper, Flopper
@@ -144,6 +145,7 @@ class AuctionKeeper:
         self.web3: Web3 = kwargs['web3'] if 'web3' in kwargs else web3_via_http(
             endpoint_uri=self.arguments.rpc_host, timeout=self.arguments.rpc_timeout, http_pool_size=100)
         self.web3.eth.defaultAccount = self.arguments.eth_from
+        self.web3.middleware_onion.inject(geth_poa_middleware, layer=0)
         register_keys(self.web3, self.arguments.eth_key)
         self.our_address = Address(self.arguments.eth_from)
 
@@ -659,7 +661,7 @@ class AuctionKeeper:
         if len(ignored_auctions) > 0:
             logging.warning(f"Processing auctions {list(self.auctions.auctions.keys())}; ignoring {ignored_auctions}")
 
-        self.logger.info(f"Checked auctions {self.arguments.min_auction} to {self.strategy.kicks()} in " 
+        self.logger.info(f"Checked auctions {self.arguments.min_auction} to {self.strategy.kicks()} in "
                          f"{(datetime.now() - started).seconds} seconds")
 
     def check_for_bids(self):
@@ -672,7 +674,7 @@ class AuctionKeeper:
             reservoir = Reservoir(Rad(self.mkr.balance_of(self.our_address)))
         else:
             raise RuntimeError("Unsupported auction type")
-        
+
         with self.auctions_lock:
             for id, auction in self.auctions.auctions.items():
                 # If we're exiting, release the lock around checking price models
@@ -784,7 +786,7 @@ class AuctionKeeper:
             # if no transaction in progress, send a new one
             transaction_in_progress = auction.transaction_in_progress()
 
-            logging.debug(f"Handling bid for auction {id}: tx in progress={transaction_in_progress is not None}, " 
+            logging.debug(f"Handling bid for auction {id}: tx in progress={transaction_in_progress is not None}, "
                           f"auction.price={auction.price}, bid_price={bid_price}")
 
             # if transaction has not been submitted...
