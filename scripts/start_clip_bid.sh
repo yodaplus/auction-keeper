@@ -5,7 +5,7 @@ echo $PASS > pass
 
 bin/auction-keeper \
   --rpc-host $RPC_HOST \
-  --eth-from $FROM \
+  --eth-from ${FROM#AWS_GUARD_} \
   --eth-key 'key_file=/opt/keeper/auction-keeper/key,pass_file=/opt/keeper/auction-keeper/pass' \
   --type clip \
   --ilk $ILK \
@@ -15,6 +15,5 @@ bin/auction-keeper \
   --bid-check-interval $BID_CHECK_INTERVAL \
   --bid-delay $BID_DELAY \
   --return-gem-interval $RETURN_GEM_INTERVAL \
-  --model /opt/keeper/auction-keeper/models/clip.sh \
-  --vat-dai-target $VAT_DAI_TARGET \
-  --debug
+  --model /opt/keeper/auction-keeper/models/clip.js \
+  --vat-dai-target $VAT_DAI_TARGET

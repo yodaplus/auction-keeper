@@ -1,0 +1,20 @@
+version: "3.2"
+
+services:
+  clip_kick:
+    build: .
+
+  flap_kick:
+    build: .
+
+  flop_kick:
+    build: .
+
+  clip_bid:
+    build: .
+
+  flap_bid:
+    build: .
+
+  flop_bid:
+    build: .

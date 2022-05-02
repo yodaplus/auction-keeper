@@ -1,0 +1,20 @@
+version: "3.2"
+
+services:
+  clip_kick:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+
+  flap_kick:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+
+  flop_kick:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+
+  clip_bid:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+
+  flap_bid:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+
+  flop_bid:
+    image: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest

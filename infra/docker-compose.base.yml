@@ -7,16 +7,14 @@ x-common-env: &common-env
 
 services:
   clip_kick:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_CLIP_KICK}
       KEY: ${KEY_CLIP_KICK}
-      ILK: XDC-A
+      ILK: XDC-C
     command: ./scripts/start_clip_kick.sh
 
   flap_kick:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_FLAP_KICK}
@@ -24,7 +22,6 @@ services:
     command: ./scripts/start_flap_kick.sh
 
   flop_kick:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_FLOP_KICK}
@@ -32,12 +29,11 @@ services:
     command: ./scripts/start_flop_kick.sh
 
   clip_bid:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_CLIP_BID}
       KEY: ${KEY_CLIP_BID}
-      ILK: XDC-A
+      ILK: XDC-C
       MAX_AUCTIONS: 10
       BID_CHECK_INTERVAL: 60
       BID_DELAY: 10
@@ -46,7 +42,6 @@ services:
     command: ./scripts/start_clip_bid.sh
 
   flap_bid:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_FLAP_BID}
@@ -56,7 +51,6 @@ services:
     command: ./scripts/start_flap_bid.sh
 
   flop_bid:
-    build: .
     environment:
       <<: *common-env
       FROM: ${FROM_FLOP_BID}

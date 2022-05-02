@@ -1,0 +1,92 @@
+name: CI Apothem
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  AWS_DEFAULT_REGION: ap-south-1
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  PASS: ${{ secrets.PASS }}
+  KEY_CLIP_KICK: ${{ secrets.KEY_CLIP_KICK }}
+  KEY_FLOP_KICK: ${{ secrets.KEY_FLOP_KICK }}
+  KEY_FLAP_KICK: ${{ secrets.KEY_FLAP_KICK }}
+  KEY_CLIP_BID: ${{ secrets.KEY_CLIP_BID }}
+  KEY_FLAP_BID: ${{ secrets.KEY_FLAP_BID }}
+  KEY_FLOP_BID: ${{ secrets.KEY_FLOP_BID }}
+  FROM_CLIP_KICK: AWS_GUARD_0x6914C50a4689915798D3329c8261a9f4Caab9385
+  FROM_FLOP_KICK: AWS_GUARD_0xca956C7385c034D85a9E3DDCDB36d6011b01A786
+  FROM_FLAP_KICK: AWS_GUARD_0xCbCCe5a209864Ae867237e762446d368B3da230F
+  FROM_CLIP_BID: AWS_GUARD_0xF7198E3d0336301327866BC5ba31C61c89dF76eD
+  FROM_FLAP_BID: AWS_GUARD_0xa03CFc9DfC01A01712cd095a0b01Eb110D894326
+  FROM_FLOP_BID: AWS_GUARD_0x9B65E25a35602f1663dFe5213e4BC12A74cAa30C
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: |
+            /tmp/.buildx-cache-keeper
+          key: ${{ runner.os }}-tokenization-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-tokenization-buildx-
+
+      - name: ECR docker login
+        run: aws ecr get-login-password | docker login --username AWS --password-stdin 135135176603.dkr.ecr.ap-south-1.amazonaws.com
+
+      - name: Build keeper
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: 135135176603.dkr.ecr.ap-south-1.amazonaws.com/auction-keeper:latest
+          cache-from: type=local,src=/tmp/.buildx-cache-keeper
+          cache-to: type=local,dest=/tmp/.buildx-cache-keeper-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-keeper
+          mv /tmp/.buildx-cache-keeper-new /tmp/.buildx-cache-keeper
+
+  publish:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install docker compose
+        run: curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+
+      - name: Create ECS context
+        run: docker context create ecs yodaplus --from-env
+
+      - name: Use ECS context
+        run: docker context use yodaplus
+
+      - name: ECR docker login
+        run: aws ecr get-login-password | docker login --username AWS --password-stdin 135135176603.dkr.ecr.ap-south-1.amazonaws.com
+
+      - name: Deploy to ECS
+        run: >
+          docker compose
+          -f infra/docker-compose.base.yml
+          -f infra/docker-compose.tags.yml
+          --project-name auction-keeper-apothem
+          --project-directory ./
+          up || true

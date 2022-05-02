@@ -5,9 +5,8 @@ echo $PASS > pass
 
 bin/auction-keeper \
   --rpc-host $RPC_HOST \
-  --eth-from $FROM \
+  --eth-from ${FROM#AWS_GUARD_} \
   --eth-key 'key_file=/opt/keeper/auction-keeper/key,pass_file=/opt/keeper/auction-keeper/pass' \
   --type flap \
   --kick-only \
-  --from-block $FROM_BLOCK \
-  --debug
+  --from-block $FROM_BLOCK
