@@ -30,6 +30,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          submodules: true
 
       - name: Set up Docker Buildx
         id: buildx
