@@ -59,3 +59,41 @@ services:
       BID_DELAY: 10
       VAT_DAI_TARGET: 20
     command: ./scripts/start_flop_bid.sh
+
+x-aws-cloudformation:
+  Resources:
+    ClipkickService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
+
+    FlapkickService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
+
+    FlopkickService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
+
+    ClipbidService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
+
+    FlapbidService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
+
+    FlopbidService:
+      Properties:
+        DeploymentConfiguration:
+          MaximumPercent: 100
+          MinimumHealthyPercent: 0
