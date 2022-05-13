@@ -7,6 +7,6 @@
     "node-fetch": "^2.6.7"
   },
   "scripts": {
-    "docker": "docker compose   -f infra/docker-compose.base.yml   -f infra/docker-compose.build.yml  --project-name auction-keeper   --project-directory ./"
+    "docker": "docker compose   -f infra/docker-compose.base.yml   -f infra/docker-compose.build.yml -f infra/docker-compose.dev.yml  --project-name auction-keeper   --project-directory ./"
   }
 }

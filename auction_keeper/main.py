@@ -875,7 +875,7 @@ class AuctionKeeper:
         dai = self.dai_join.dai()
         token_balance = dai.balance_of(self.our_address)  # Wad
         # Prevent spending gas on small rebalances
-        dust = Wad(self.mcd.vat.ilk(self.ilk.name).dust) if self.ilk else Wad.from_number(20)
+        dust = Wad(self.mcd.vat.ilk(self.ilk.name).dust) if self.ilk else Wad.from_number(0)
 
         dai_to_join = Wad(0)
         dai_to_exit = Wad(0)

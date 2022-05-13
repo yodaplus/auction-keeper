@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+  clip_kick:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv
+
+  flap_kick:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv
+
+  flop_kick:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv
+
+  clip_bid:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv
+
+  flap_bid:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv
+
+  flop_bid:
+    volumes:
+      - .:/opt/keeper/auction-keeper
+      - /opt/keeper/auction-keeper/_virtualenv

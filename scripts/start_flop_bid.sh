@@ -13,4 +13,5 @@ bin/auction-keeper \
   --bid-check-interval $BID_CHECK_INTERVAL \
   --bid-delay $BID_DELAY \
   --vat-dai-target $VAT_DAI_TARGET \
-  --model /opt/keeper/auction-keeper/models/flop.sh
+  --model /opt/keeper/auction-keeper/models/flop.sh \
+  --min-auction 43

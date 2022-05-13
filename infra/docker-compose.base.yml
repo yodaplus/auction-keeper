@@ -38,7 +38,7 @@ services:
       BID_CHECK_INTERVAL: 60
       BID_DELAY: 10
       RETURN_GEM_INTERVAL: 60
-      VAT_DAI_TARGET: 20
+      VAT_DAI_TARGET: ALL
     command: ./scripts/start_clip_bid.sh
 
   flap_bid:
@@ -57,7 +57,7 @@ services:
       KEY: ${KEY_FLOP_BID}
       BID_CHECK_INTERVAL: 60
       BID_DELAY: 10
-      VAT_DAI_TARGET: 20
+      VAT_DAI_TARGET: ALL
     command: ./scripts/start_flop_bid.sh
 
 x-aws-cloudformation:
